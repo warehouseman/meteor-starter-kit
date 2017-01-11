@@ -1,38 +1,13 @@
-import { Random } from 'meteor/random';
-
-export const typeDefs = [`
-type Email {
-  address: String
-  verified: Boolean
+export default typeDefs = [`
+type Post {
+  id: Int
+  content: String
+  views: Int
 }
-
-type User {
-  emails: [Email]
-  username: String
-  randomString: String
-  _id: String
-}
-
 type Query {
-  user(id: String!): User
+  posts(views: Int): [Post]
 }
-
 schema {
   query: Query
 }
 `];
-
-export const resolvers = {
-  Query: {
-    user(root, args, context) {
-      // Only return the current user, for security
-      if (context && context.userId && context.userId === args.id) {
-        return context.user;
-      }
-    },
-  },
-  User: {
-    emails: ({emails}) => emails,
-    randomString: () => Random.id(),
-  }
-}
